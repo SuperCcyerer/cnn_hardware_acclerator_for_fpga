@@ -22,57 +22,57 @@ generate
 genvar i;
 for(i = 0;i<k*k;i=i+1)
 begin: MAC
-if((i+1)%k ==0)    //end of the row
-begin
-if(i==k*k-1) //end of convolver
-begin
-mac_manual mac(                     //implements a*b+c
-  .clk(clk), // input clk
-  .ce(ce), // input ce
-  .sclr(global_rst), // input sclr
-  .a(activation), // activation input [15 : 0] a
-  .b(weight[i]), // weight input [15 : 0] b
-  .c(tmp[i]), // previous mac sum input [32 : 0] c
-  .p(conv_op) // output [32 : 0] p
-  );
-end
-else
-begin
-wire [31:0] tmp2;
-//make a mac unit
-mac_manual mac(                     //implements a*b+c
-  .clk(clk), // input clk
-  .ce(ce), // input ce
-  .sclr(global_rst), // input sclr
-  .a(activation), // activation input [15 : 0] a
-  .b(weight[i]), // weight input [15 : 0] b
-  .c(tmp[i]), // previous mac sum input [33 : 0] c
-  .p(tmp2) // output [33 : 0] p
-  );
-
-//make a shift register unit
-c_shift_ram_0 SR (
-  .A(n-k-9'h004), // input [8 : 0] a
-  .D(tmp2), // input [32 : 0] d
-  .CLK(clk), // input clk
-  .CE(ce), // input ce
-  .SCLR(global_rst), // input sclr
-  .Q(tmp[i+1]) // output [32 : 0] q
-  );
-end
-end
-else
-begin
-mac_manual mac2(                     //implements a*b+c
-  .clk(clk), // input clk
-  .ce(ce), // input ce
-  .sclr(global_rst), // input sclr
-  .a(activation), // activation input [15 : 0] a
-  .b(weight[i]), // weight input [15 : 0] b
-  .c(tmp[i]), // previous mac sum input [31 : 0] c
-  .p(tmp[i+1]) // output [31 : 0] p
-  );
-end 
+  if((i+1)%k ==0)    //end of the row
+  begin
+    if(i==k*k-1) //end of convolver 
+    begin
+      mac_manual mac(                     //implements a*b+c
+        .clk(clk), // input clk
+        .ce(ce), // input ce
+        .sclr(global_rst), // input sclr
+        .a(activation), // activation input [15 : 0] a
+        .b(weight[i]), // weight input [15 : 0] b
+        .c(tmp[i]), // previous mac sum input [32 : 0] c
+        .p(conv_op) // output [32 : 0] p
+        );
+    end
+    else
+    begin
+      wire [31:0] tmp2;
+      //make a mac unit
+      mac_manual mac(                     //implements a*b+c
+        .clk(clk), // input clk
+        .ce(ce), // input ce
+        .sclr(global_rst), // input sclr
+        .a(activation), // activation input [15 : 0] a
+        .b(weight[i]), // weight input [15 : 0] b
+        .c(tmp[i]), // previous mac sum input [33 : 0] c
+        .p(tmp2) // output [33 : 0] p
+        );
+      
+      //make a shift register unit
+      c_shift_ram_0 SR (
+        .A(n-k-9'h004), // input [8 : 0] a
+        .D(tmp2), // input [32 : 0] d
+        .CLK(clk), // input clk
+        .CE(ce), // input ce
+        .SCLR(global_rst), // input sclr
+        .Q(tmp[i+1]) // output [32 : 0] q
+        );
+    end
+    end
+    else
+    begin
+    mac_manual mac2(                     //implements a*b+c
+      .clk(clk), // input clk
+      .ce(ce), // input ce
+      .sclr(global_rst), // input sclr
+      .a(activation), // activation input [15 : 0] a
+      .b(weight[i]), // weight input [15 : 0] b
+      .c(tmp[i]), // previous mac sum input [31 : 0] c
+      .p(tmp[i+1]) // output [31 : 0] p
+      );
+  end 
 end 
 endgenerate
 
