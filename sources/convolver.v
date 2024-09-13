@@ -60,7 +60,7 @@ begin: MAC
         .Q(tmp[i+1]) // output [32 : 0] q
         );
     end
-    end
+  end
     else
     begin
     mac_manual mac2(                     //implements a*b+c
@@ -72,7 +72,7 @@ begin: MAC
       .c(tmp[i]), // previous mac sum input [31 : 0] c
       .p(tmp[i+1]) // output [31 : 0] p
       );
-  end 
+    end 
 end 
 endgenerate
 
