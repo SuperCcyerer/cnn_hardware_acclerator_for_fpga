@@ -84,30 +84,30 @@ always@(posedge clk) begin
 
 if(global_rst)
 begin
-count <=0;     //master counter: counts the clock cycles
-count2<=0;     //counts the valid convolution outputs
-count3<=0;     // counts the number of invalid onvolutions where the kernel wraps around the next row of inputs.
-row_count <= 0; //counts the number of rows of the output.
-en1<=0;
-en2<=1;
-en3<=0;
+  count <=0;     //master counter: counts the clock cycles
+  count2<=0;     //counts the valid convolution outputs
+  count3<=0;     // counts the number of invalid onvolutions where the kernel wraps around the next row of inputs.
+  row_count <= 0; //counts the number of rows of the output.
+  en1<=0;
+  en2<=1;
+  en3<=0;
 end
 
 else if(ce)
-begin
-
-if(count == (k-1)*n+k-1)   // time taken for the pipeline to fill up is (k-1)*n+k-1
-begin
-en1 <= 1'b1;
-count <= count+1'b1;
-end
-else
-begin 
-//en1<= 1'b0;
-count<= count+1'b1;
-end
-
-end
+  begin
+  
+    if(count == (k-1)*n+k-1)   // time taken for the pipeline to fill up is (k-1)*n+k-1
+    begin
+      en1 <= 1'b1;
+      count <= count+1'b1;
+    end
+    else
+    begin 
+      //en1<= 1'b0;
+      count<= count+1'b1;
+    end
+  
+  end
 if(en1 && en2) begin
 
 if(count2 == n-k)
